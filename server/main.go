@@ -10,6 +10,7 @@ import (
 	//"bytes"
 	//"runtime"
 	//"strconv"
+	"server/store"
 )
 
 var (
@@ -44,6 +45,8 @@ func main() {
 		log.Println("USEAGE: TaskTalk {listenAddr}")
 		log.Println("Listening Default:", addr)
 	}
+
+	store.Connect() // TODO keke 连接失败检查一下
 
 	http.Handle(CLIENT_WEBSOCKET_URI, websocket.Handler(wsAccapt))
 	if err := http.ListenAndServe(addr, nil); err != nil {
