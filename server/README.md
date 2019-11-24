@@ -97,12 +97,32 @@ sum(1, 2) => 3
   
   {// 回复成功
   	"id": 1
+      "result":{
+      	"status": 0
+	} 
+  }
+  
+  {// 回复成功, 该账号第一次登录
+  	"id": 1
+      "result":{
+      	"status": 1
+  	} 
+  }
+  
+  {// 回复成功, 和上一次登录ip不同
+  	"id": 1
+      "result":{
+      	"status": 2,
+      	"lastLoginTime":""0, //上一次登录的时间
+      	"lastLogoutTime":0, //上一次登出的时间
+      	"lastIp": "" //上次登录的ip地址
+  	} 
   }
   ```
-
+  
   
 
-### notify.auth.report
+### notify.auth.offline
 
 * direction
 
@@ -110,20 +130,18 @@ sum(1, 2) => 3
 
 * desc
 
-  客户端登录异常, 服务端的告警通知
+  通知客户端掉线
 
 * example
 
   ```json
   {// 通知
-  	"method":"notify.auth.report",
+  	"method":"notify.auth.offline",
   	"params":{
-  		"status": 0, // 1=该账号第一次登录, 2=和上一次登录ip不同, 3=被另一个人挤下线
-  		"ip": "", // status=2|3时出现, 2: 上次登录的ip地址, 3:另一个人的ip
-  		"lastLoginTime":0, // status=2时出现, 上一次登录的时间
-  		"lastLogoutTime":0 // status=2时出现, 上一次登出的时间
+  		"reason": 0, // 1=被另一个人挤下线
+  		"ip": "", // 另一个人的ip, reason=1时出现该字段
   	}
   }
   ```
-
+  
   
