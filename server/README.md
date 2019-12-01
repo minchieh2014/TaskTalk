@@ -69,11 +69,9 @@ sum(1, 2) => 3
 
 
 
+## http协议
 
-
-## 协议
-
-### auth.login
+/login
 
 * direction
 
@@ -81,46 +79,56 @@ sum(1, 2) => 3
 
 * desc
 
-  客户端登录
+  此协议用于换取真正有状态的的websocket地址, 该ws地址, 一旦连上将产生登录信息
+
+  此协议用于版本检查
 
 * example
 
-  ```json
-  {// 请求
-  	"method":"auth.login",
-  	"id": 1,
-  	"params":{
-  		"id":"1111" // 工号
-  		"name":"张三"
-  	}
-  }
-  
-  {// 回复成功
-  	"id": 1
-      "result":{
-      	"status": 0
-	} 
-  }
-  
-  {// 回复成功, 该账号第一次登录
-  	"id": 1
-      "result":{
-      	"status": 1
-  	} 
-  }
-  
-  {// 回复成功, 和上一次登录ip不同
-  	"id": 1
-      "result":{
-      	"status": 2,
-      	"lastLoginTime":""0, //上一次登录的时间
-      	"lastLogoutTime":0, //上一次登出的时间
-      	"lastIp": "" //上次登录的ip地址
-  	} 
-  }
-  ```
-  
-  
+```json
+POST http://xxx.xxx.xxx.xxx:xxx/login HTTP/1.1
+{
+	"id":"1111", // 工号
+	"name":"张三",
+	"version":"1.0.0"
+}
+
+// 登录成功
+HTTP/1.1 200 OK
+{
+	"status": 0,
+	"wsUrl":"ws://xxx.xxx.xxx.xxx:xxx/xxx?token=xxx"
+}
+
+// 登录成功, 该账号第一次登录
+HTTP/1.1 200 OK
+{
+	"status": 1,
+	"wsUrl":"ws://xxx.xxx.xxx.xxx:xxx/xxx?token=xxx"
+}
+
+// 版本不对
+HTTP/1.1 200 OK
+{
+	"status": 2,
+	"lastVersion": "1.0.1"
+}
+
+// 和上一次登录ip不同, 可以强行登录
+HTTP/1.1 200 OK
+{
+	"status": 3,
+	"wsUrl":"ws://xxx.xxx.xxx.xxx:xxx/xxx?token=xxx"
+}
+```
+
+
+
+
+
+## websocket协议
+
+
 
 ### notify.auth.offline
 
